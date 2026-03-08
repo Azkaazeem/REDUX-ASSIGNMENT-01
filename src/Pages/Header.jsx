@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const navLinks = [
   { label: "Home", href: "#" },
@@ -20,54 +21,42 @@ const Header = () => {
       className="fixed top-0 left-0 right-0 z-50 glass border-b border-border"
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <motion.a
-          href="#"
-          className="flex items-center gap-2 font-heading text-xl font-bold tracking-tight"
-          whileHover={{ scale: 1.05 }}
-        >
+        {/* Logo - Left Side */}
+        <Link to="/" className="flex items-center gap-2 font-heading text-xl font-bold tracking-tight">
           <span className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-black text-sm">
             C
           </span>
           <span className="text-foreground">
-            Coin<span className="text-gradient">core</span>
+            Coin<span className="text-primary">core</span>
           </span>
-        </motion.a>
+        </Link>
 
-        {/* Desktop Nav */}
+        {/* Desktop Nav - Middle */}
         <nav className="hidden md:flex items-center gap-1">
-          {navLinks.map((link, i) => (
-            <motion.a
+          {navLinks.map((link) => (
+            <Link
               key={link.label}
-              href={link.href}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 * i + 0.3 }}
+              to={link.href}
               className="relative px-4 py-2 text-sm font-medium text-muted-foreground transition-colors duration-300 hover:text-foreground group"
             >
               {link.label}
               <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary rounded-full transition-all duration-300 group-hover:w-3/4" />
-            </motion.a>
+            </Link>
           ))}
         </nav>
 
-        {/* CTA Button */}
-        <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.6 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="hidden md:block px-5 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold transition-shadow duration-300 hover:glow-btn"
-        >
-          Download
-        </motion.button>
+        {/* Desktop Buttons - Right Side */}
+        <div className="hidden md:flex gap-3">
+          <Link to="/login" className="px-5 py-2 rounded-lg border border-border text-foreground text-sm font-semibold transition-colors duration-300 hover:bg-secondary/50">
+            Sign In
+          </Link>
+          <Link to="/signup" className="px-5 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold transition-shadow duration-300 hover:glow-btn">
+            Sign Up
+          </Link>
+        </div>
 
-        {/* Mobile Toggle Button */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden text-foreground p-2"
-        >
+        {/* Mobile Toggle (Hamburger) - Right Side on Mobile */}
+        <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-foreground p-2">
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
@@ -83,18 +72,30 @@ const Header = () => {
             className="md:hidden glass border-t border-border overflow-hidden"
           >
             <div className="px-6 py-4 flex flex-col gap-3">
+              {/* Mobile 4 Links */}
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.label}
-                  href={link.href}
+                  to={link.href}
+                  onClick={() => setMobileOpen(false)}
                   className="text-muted-foreground hover:text-foreground transition-colors py-2 text-sm font-medium"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
-              <button className="mt-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-semibold w-full">
-                Download
-              </button>
+              
+              {/* Divider */}
+              <div className="h-px bg-border my-1" />
+
+              {/* Mobile 2 Auth Buttons */}
+              <div className="flex flex-col gap-2 mt-1">
+                <Link to="/login" onClick={() => setMobileOpen(false)} className="px-5 py-2.5 rounded-lg border border-border text-center text-foreground text-sm font-semibold w-full transition-colors hover:bg-secondary/50">
+                  Sign In
+                </Link>
+                <Link to="/signup" onClick={() => setMobileOpen(false)} className="px-5 py-2.5 rounded-lg bg-primary text-center text-primary-foreground text-sm font-semibold w-full transition-shadow hover:glow-btn">
+                  Sign Up
+                </Link>
+              </div>
             </div>
           </motion.div>
         )}

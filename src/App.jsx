@@ -1,45 +1,28 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-// Aapke naye banaye gaye components import karein
-// (Path apne folder structure ke mutabiq adjust kar lein agar zaroorat ho)
-import Header from "./components/Header";
-import Login from "./components/Login";
-import SignUp from "./components/SignUp";
+import Header from "./Pages/Header";
+import Login from "./Pages/Login";
+import Signup from "./Pages/Signup";
 
-const queryClient = new QueryClient();
-
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        {/* Header ko Routes se bahar rakha hai taake ye navigation bar har page par nazar aaye */}
+const App = () => {
+  return (
+    <BrowserRouter>
+      {/* Wrapper added to ensure the dark background applies to the whole screen */}
+      <div className="min-h-screen bg-background text-foreground font-sans">
         <Header />
         
-        {/* pt-16 isliye lagaya hai taake page ka content fixed Header ke peeche na chhupe */}
         <div className="pt-16">
           <Routes>
-            {/* Aapka pehle se mojood Index route */}
-            <Route path="/" element={<Index />} />
-            
-            {/* Naye Login aur Sign Up pages ke routes */}
+            <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </div>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+      </div>
+    </BrowserRouter>
+  );
+};
 
 export default App;

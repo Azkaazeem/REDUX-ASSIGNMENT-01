@@ -1,6 +1,75 @@
 @import "tailwindcss";
-/* @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@1,700&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* body {
-    background-color: black;
-} */
+/* Tailwind v4 requires defining custom colors in the @theme block */
+@theme {
+  --color-background: hsl(0 0% 4%);
+  --color-foreground: hsl(0 0% 95%);
+
+  --color-card: hsl(0 0% 7%);
+  --color-card-foreground: hsl(0 0% 95%);
+
+  --color-popover: hsl(0 0% 7%);
+  --color-popover-foreground: hsl(0 0% 95%);
+
+  --color-primary: hsl(20 100% 50%);
+  --color-primary-foreground: hsl(0 0% 100%);
+
+  --color-secondary: hsl(0 0% 12%);
+  --color-secondary-foreground: hsl(0 0% 95%);
+
+  --color-muted: hsl(0 0% 15%);
+  --color-muted-foreground: hsl(0 0% 55%);
+
+  --color-accent: hsl(20 100% 50%);
+  --color-accent-foreground: hsl(0 0% 100%);
+
+  --color-destructive: hsl(0 84.2% 60.2%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+
+  --color-border: hsl(0 0% 16%);
+  --color-input: hsl(0 0% 14%);
+  --color-ring: hsl(20 100% 50%);
+
+  --radius-md: 0.75rem;
+
+  --font-sans: 'Space Grotesk', 'Inter', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(20, 100%, 55%), hsl(35, 100%, 65%));
+  }
+  .glow-border {
+    box-shadow: 0 0 20px hsl(20 100% 50% / 0.15), inset 0 0 20px hsl(20 100% 50% / 0.05);
+  }
+  .glow-btn {
+    box-shadow: 0 0 25px hsl(20 100% 50% / 0.4), 0 0 50px hsl(20 100% 50% / 0.15);
+  }
+  .glass {
+    background: hsl(0 0% 8% / 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  
+  /* Adding pulse-glow animation that was used in your AuthPage component */
+  .animate-pulse-glow {
+    animation: pulse-glow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}
