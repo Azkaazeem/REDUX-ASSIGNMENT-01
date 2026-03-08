@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { Download, ArrowUpRight, ArrowDownLeft, Wallet, Clock } from "lucide-react";
+import { Clock, ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import { supabase } from "../supabaseClient";
 import { toast } from "sonner";
+// Redux Hooks aur Actions import karein
+import { useSelector, useDispatch } from "react-redux";
+import { setInitialData, updateBalance, addTransaction } from "../store/bankingSlice";
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [userName, setUserName] = useState("User");
-  const [balance, setBalance] = useState(0);
   const [amount, setAmount] = useState("");
-  const [history, setHistory] = useState([]);
+
+  // Redux se balance aur history fetch karein
+  const { balance, history } = useSelector((state) => state.banking);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchData();
@@ -21,19 +25,38 @@ const Dashboard = () => {
       setUser(session.user);
       setUserName(session.user.user_metadata?.full_name || session.user.email.split('@')[0]);
 
-      // Database se balance fetch karein
-      const { data: profile } = await supabase.from('profiles').select('balance').eq('id', session.user.id).single();
-      if (profile) setBalance(profile.balance);
+      let currentBalance = 0;
+      let currentHistory = [];
 
-      // Database se transactions fetch karein
-      const { data: trans } = await supabase.from('transactions').select('*').eq('user_id', session.user.id).order('created_at', { ascending: false });
-      if (trans) setHistory(trans);
+      // 1. Supabase se Profile (Balance) fetch karein
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('balance')
+        .eq('id', session.user.id)
+        .maybeSingle();
+        
+      if (profile && profile.balance != null) {
+        currentBalance = Number(profile.balance);
+      }
+
+      // 2. Supabase se Transactions (History) fetch karein
+      const { data: trans } = await supabase
+        .from('transactions')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .order('created_at', { ascending: false });
+        
+      if (trans) {
+        currentHistory = trans;
+      }
+
+      // 3. Redux Store ko Initial Data se update karein
+      dispatch(setInitialData({ balance: currentBalance, history: currentHistory }));
     }
   };
 
-  // Transaction handle karne ka function (e.preventDefault ke saath)
   const handleTransaction = async (e, type) => {
-    if (e) e.preventDefault(); // Page refresh rokne ke liye
+    if (e) e.preventDefault(); 
 
     const val = parseFloat(amount);
     if (!val || val <= 0) return toast.error("Please enter a valid amount");
@@ -41,21 +64,35 @@ const Dashboard = () => {
     let newBalance = type === 'deposit' ? balance + val : balance - val;
     if (type === 'withdraw' && val > balance) return toast.error("Insufficient balance!");
 
-    // 1. Database mein Update karein
-    const { error: balError } = await supabase.from('profiles').update({ balance: newBalance }).eq('id', user.id);
+    // 1. Database (Supabase) mein Profile update karein
+    const { error: balError } = await supabase
+      .from('profiles')
+      .upsert({ id: user.id, balance: newBalance });
     
     if (!balError) {
-      // 2. Transaction table mein entry daalein
-      await supabase.from('transactions').insert([{ user_id: user.id, type, amount: val }]);
+      // 2. Database mein Transaction insert karein aur return karwayein
+      const { data: insertedTx, error: txError } = await supabase
+        .from('transactions')
+        .insert([{ user_id: user.id, type, amount: val }])
+        .select() // .select() isliye lagaya taa ke DB naya ID aur created_at wapis bhej de
+        .single();
 
-      setBalance(newBalance);
-      setAmount("");
+      if (txError) return toast.error("Transaction Error: " + txError.message);
+
+      // 3. REDUX State ko update karein (foran UI change karne ke liye)
+      dispatch(updateBalance({ type, amount: val }));
       
-      // 3. History refresh karein
-      fetchData();
+      // Agar db se return aaya hai toh wo pass karein, warna local object bana lein
+      if (insertedTx) {
+          dispatch(addTransaction(insertedTx));
+      } else {
+          dispatch(addTransaction({ id: Date.now(), type, amount: val, created_at: new Date().toISOString() }));
+      }
+
+      setAmount("");
       toast.success(`${type.toUpperCase()} Successful!`);
     } else {
-      toast.error("Database Error! Make sure tables exist.");
+      toast.error(balError.message || "Database Error! Make sure tables exist.");
     }
   };
 
@@ -63,12 +100,10 @@ const Dashboard = () => {
     <div className="min-h-[calc(100vh-4rem)] p-6 md:p-10 max-w-7xl mx-auto space-y-8">
       <h1 className="text-3xl font-bold">Welcome back, <span className="text-primary capitalize">{userName}</span></h1>
 
-      {/* Main Balance Card */}
       <div className="rounded-2xl p-8 bg-card border border-border shadow-xl">
         <p className="text-muted-foreground mb-1 font-medium">Available Balance</p>
-        <h2 className="text-5xl font-bold mb-8 text-foreground">${balance.toFixed(2)}</h2>
+        <h2 className="text-5xl font-bold mb-8 text-foreground">${Number(balance || 0).toFixed(2)}</h2>
         
-        {/* Input and Buttons Form */}
         <form onSubmit={(e) => e.preventDefault()} className="flex flex-col md:flex-row gap-4 max-w-md">
           <input 
             type="number" 
@@ -78,7 +113,6 @@ const Dashboard = () => {
             className="flex-1 p-3 rounded-xl border bg-background outline-none focus:ring-2 focus:ring-primary text-foreground" 
           />
           <div className="flex gap-2">
-            {/* type="button" refresh rokne mein mazeed madad karta hai */}
             <button type="button" onClick={(e) => handleTransaction(e, 'deposit')} className="bg-green-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-700 transition-all">
               Deposit
             </button>
@@ -89,7 +123,6 @@ const Dashboard = () => {
         </form>
       </div>
 
-      {/* Transactions History List */}
       <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-sm">
         <div className="p-6 border-b border-border flex items-center gap-2 font-bold text-lg text-foreground">
           <Clock size={20} /> Recent Transactions
