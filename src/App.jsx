@@ -4,11 +4,11 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Header from "./Pages/Header";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
+import Dashboard from "./Pages/Dashboard"; // Naya import
 
 const App = () => {
   return (
     <BrowserRouter>
-      {/* Wrapper added to ensure the dark background applies to the whole screen */}
       <div className="min-h-screen bg-background text-foreground font-sans">
         <Header />
         
@@ -17,6 +17,7 @@ const App = () => {
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/dashboard" element={<Dashboard />} /> {/* Naya Route */}
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </div>
