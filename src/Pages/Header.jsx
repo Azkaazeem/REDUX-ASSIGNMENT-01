@@ -5,9 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient"; // Supabase import kiya
 import { toast } from "sonner";
 
-// Dashboard wala link yahan bhi hai
 const navLinks = [
-  { label: "Home", href: "#" },
+  { label: "Home", href: "/" }, // "#" ki jagah "/" laga diya
   { label: "Dashboard", href: "/dashboard" },
   { label: "Blog", href: "#" },
   { label: "About", href: "#" },
