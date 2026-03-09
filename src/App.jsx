@@ -4,6 +4,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Header from "./Pages/Header";
 import Footer from "./Comps/Footer"; // Footer import kiya
 import Home from "./Pages/Home";
+import Blog from "./Pages/Blog";
+import About from "./Pages/About";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import Dashboard from "./Pages/Dashboard"; 
@@ -19,6 +21,8 @@ const App = () => {
         <main className="pt-16 flex-1">
           <Routes>
             <Route path="/" element={<Home />} /> 
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={<Dashboard />} />

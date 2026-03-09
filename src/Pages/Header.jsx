@@ -8,8 +8,8 @@ import { toast } from "sonner";
 const navLinks = [
   { label: "Home", href: "/" }, // "#" ki jagah "/" laga diya
   { label: "Dashboard", href: "/dashboard" },
-  { label: "Blog", href: "#" },
-  { label: "About", href: "#" },
+  { label: "Blog", href: "/blog" },
+  { label: "About", href: "/about" },
   { label: "Contact", href: "#" },
 ];
 
