@@ -6,11 +6,10 @@ import { Link } from 'react-router-dom';
 const Home = () => {
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col items-center relative overflow-hidden">
-      {/* Background glow effects */}
+
       <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-blue-500/10 blur-[100px] pointer-events-none" />
 
-      {/* Hero Section */}
       <section className="w-full max-w-7xl mx-auto px-6 pt-24 pb-16 md:pt-32 md:pb-24 flex flex-col items-center text-center z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -58,7 +57,6 @@ const Home = () => {
         </motion.div>
       </section>
 
-      {/* Features Section */}
       <section className="w-full max-w-7xl mx-auto px-6 py-16 z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[

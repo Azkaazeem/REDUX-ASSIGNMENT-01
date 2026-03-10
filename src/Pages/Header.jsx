@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, LogOut } from "lucide-react"; // LogOut icon import kiya
+import { Menu, X, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "../supabaseClient"; // Supabase import kiya
+import { supabase } from "../supabaseClient";
 import { toast } from "sonner";
 
 const navLinks = [
-  { label: "Home", href: "/" }, // "#" ki jagah "/" laga diya
+  { label: "Home", href: "/" },
   { label: "Dashboard", href: "/dashboard" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
@@ -15,17 +15,14 @@ const navLinks = [
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [user, setUser] = useState(null); // User ka status save karne ke liye state
+  const [user, setUser] = useState(null); 
   const navigate = useNavigate();
 
-  // Component load hotay hi check karo ke user login hai ya nahi
   useEffect(() => {
-    // Current session get karo
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
     });
 
-    // Agar user background mein login/logout ho toh usay track karo
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
@@ -33,15 +30,14 @@ const Header = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Logout function
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
       toast.error(error.message);
     } else {
       toast.success("Logged out successfully!");
-      setMobileOpen(false); // Mobile menu band karne ke liye
-      navigate("/login"); // Logout ke baad login par bhej dein
+      setMobileOpen(false);
+      navigate("/login");
     }
   };
 
@@ -53,7 +49,7 @@ const Header = () => {
       className="fixed top-0 left-0 right-0 z-50 glass border-b border-border"
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* Logo */}
+
         <Link to="/" className="flex items-center gap-2 font-heading text-xl font-bold tracking-tight">
           <span className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-black text-sm">
             C
@@ -63,10 +59,8 @@ const Header = () => {
           </span>
         </Link>
 
-        {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => {
-            // Agar user login nahi hai, toh Dashboard ka link na dikhao
             if (link.label === "Dashboard" && !user) return null;
             
             return (
@@ -78,10 +72,8 @@ const Header = () => {
           })}
         </nav>
 
-        {/* Desktop Buttons (Login/Signup YA Logout) */}
         <div className="hidden md:flex gap-3">
           {user ? (
-            // Agar Login hai toh sirf Logout ka button dikhao
             <button 
               onClick={handleLogout}
               className="px-5 py-2 rounded-lg border border-red-500/30 text-red-500 hover:bg-red-500 hover:text-white text-sm font-semibold transition-all duration-300 flex items-center gap-2"
@@ -90,7 +82,6 @@ const Header = () => {
               Logout
             </button>
           ) : (
-            // Agar Login nahi hai toh Sign In aur Sign Up dikhao
             <>
               <Link to="/login" className="px-5 py-2 rounded-lg border border-border text-foreground text-sm font-semibold transition-colors duration-300 hover:bg-secondary/50">
                 Sign In
@@ -102,13 +93,11 @@ const Header = () => {
           )}
         </div>
 
-        {/* Mobile Toggle */}
         <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-foreground p-2">
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -128,7 +117,6 @@ const Header = () => {
               })}
               <div className="h-px bg-border my-1" />
               
-              {/* Mobile Buttons Logic */}
               <div className="flex flex-col gap-2 mt-1">
                 {user ? (
                   <button onClick={handleLogout} className="px-5 py-2.5 rounded-lg border border-red-500/30 text-red-500 hover:bg-red-500 hover:text-white text-sm font-semibold w-full transition-all flex items-center justify-center gap-2">

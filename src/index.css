@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* Tailwind v4 requires defining custom colors in the @theme block */
 @theme {
   --color-background: hsl(0 0% 4%);
   --color-foreground: hsl(0 0% 95%);
@@ -63,7 +62,6 @@
     -webkit-backdrop-filter: blur(20px);
   }
   
-  /* Adding pulse-glow animation that was used in your AuthPage component */
   .animate-pulse-glow {
     animation: pulse-glow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }

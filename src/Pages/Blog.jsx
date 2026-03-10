@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Calendar, User, ArrowRight, ChevronRight } from 'lucide-react';
 
-// Dummy blog data - Reality mein ye database (jaise Supabase) se aayega
 const blogPosts = [
   {
     id: 1,
@@ -66,7 +65,6 @@ const Blog = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Filter logic based on category and search
   const filteredPosts = blogPosts.filter(post => {
     const matchesCategory = activeCategory === "All" || post.category === activeCategory;
     const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -76,7 +74,7 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden pb-20">
-      {/* Background Effects */}
+
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/10 blur-[150px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 pt-24">

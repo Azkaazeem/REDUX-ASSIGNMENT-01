@@ -20,7 +20,7 @@ const bankingSlice = createSlice({
       }
     },
     addTransaction: (state, action) => {
-      state.history.unshift(action.payload); // Naya record sabse upar dikhane ke liye
+      state.history.unshift(action.payload);
     },
   },
 });

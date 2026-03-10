@@ -84,7 +84,7 @@ const About = () => {
                     viewport={{ once: true }}
                     className="max-w-4xl mx-auto bg-card rounded-3xl border border-border overflow-hidden shadow-lg flex flex-col md:flex-row items-center"
                 >
-                    {/* Profile Image - Yahan aap apni tasveer ka link daal sakte hain */}
+                    {/* Profile Image */}
                     <div className="w-full md:w-2/5 h-[400px] md:h-auto relative">
                         <img
                             src= {MyPic
@@ -93,7 +93,6 @@ const About = () => {
                             alt="Azka - Founder & Developer"
                             className="w-full h-full object-cover"
                         />
-                        {/* Gradient Overlay for style */}
                         <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent md:hidden" />
                     </div>
 

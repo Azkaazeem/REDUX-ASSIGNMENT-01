@@ -3,20 +3,18 @@ import { motion } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { supabase } from "../supabaseClient"; // Dhyan rahe path theek ho
+import { supabase } from "../supabaseClient";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   
-  // States for form inputs
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   
   const navigate = useNavigate();
 
-  // Handle Email/Password Signup
   const handleSignup = async (e) => {
     e.preventDefault();
     if (!fullName || !email || !password) {
@@ -41,16 +39,15 @@ const Signup = () => {
       toast.error(error.message);
     } else {
       toast.success("Account created successfully!");
-      navigate("/dashboard"); // Redirect to Dashboard
+      navigate("/dashboard");
     }
   };
 
-  // Handle OAuth Signup (Google / GitHub)
   const handleOAuth = async (provider) => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
-        redirectTo: `${window.location.origin}/dashboard`, // Login ke baad kahan jana hai
+        redirectTo: `${window.location.origin}/dashboard`,
       }
     });
     if (error) toast.error(error.message);

@@ -15,9 +15,9 @@ const Contact = () => {
   // Popup State
   const [popup, setPopup] = useState({
     isOpen: false,
-    type: 'success', // 'success' ya 'error'
+    type: 'success',
     message: '',
-    isDevError: false // Developer error check karne ke liye
+    isDevError: false
   });
 
   const handleChange = (e) => {
@@ -31,7 +31,6 @@ const Contact = () => {
 const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // 1. User Input Error Check
     if (!formData.name || !formData.email || !formData.message) {
       setPopup({
         isOpen: true,
@@ -45,7 +44,6 @@ const handleSubmit = async (e) => {
     setLoading(true);
 
     try {
-      // Supabase DB Insert
       const { error } = await supabase
         .from('BankContact')
         .insert([
@@ -57,12 +55,10 @@ const handleSubmit = async (e) => {
           }
         ]);
 
-      // Agar Supabase ne error return kiya
       if (error) {
-        throw error; // Isko catch block mein bhej do
+        throw error
       }
 
-      // 3. Success (Agar koi error nahi aaya)
       setPopup({
         isOpen: true,
         type: 'success',
@@ -70,11 +66,9 @@ const handleSubmit = async (e) => {
         isDevError: false
       });
       
-      // Form fields clear kar dein
       setFormData({ name: '', email: '', subject: '', message: '' });
 
     } catch (err) {
-      // 2. Developer/Network Error (Jaise Failed to fetch)
       setPopup({
         isOpen: true,
         type: 'error',
@@ -82,7 +76,6 @@ const handleSubmit = async (e) => {
         isDevError: true
       });
     } finally {
-      // Chahe success ho ya error, loading ko false karna zaroori hai
       setLoading(false);
     }
   };
@@ -90,11 +83,10 @@ const handleSubmit = async (e) => {
   return (
     <div className="min-h-screen bg-background relative overflow-hidden pb-20">
       
-      {/* --- POPUP MODAL --- */}
       <AnimatePresence>
         {popup.isOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Background Overlay */}
+
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -103,7 +95,6 @@ const handleSubmit = async (e) => {
               className="absolute inset-0 bg-background/80 backdrop-blur-sm"
             />
             
-            {/* Modal Box */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -151,16 +142,13 @@ const handleSubmit = async (e) => {
           </div>
         )}
       </AnimatePresence>
-      {/* --- END POPUP --- */}
 
 
-      {/* Background Effects */}
       <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-primary/5 blur-[150px] rounded-full pointer-events-none" />
       <div className="absolute bottom-1/4 right-0 w-[400px] h-[400px] bg-blue-500/5 blur-[150px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 pt-24 relative z-10">
         
-        {/* Header */}
         <div className="text-center mb-16">
           <motion.h1 
             initial={{ opacity: 0, y: -20 }}
@@ -181,7 +169,6 @@ const handleSubmit = async (e) => {
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
           
-          {/* Contact Information (Left Side) */}
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -225,7 +212,6 @@ const handleSubmit = async (e) => {
             </div>
           </motion.div>
 
-          {/* Contact Form (Right Side) */}
           <motion.div 
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}

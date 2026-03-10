@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, Linkedin, Shield } from 'lucide-react'; // Humne Lucide-react ke icons use kiye hain
+import { Facebook, Twitter, Instagram, Linkedin, Shield } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -9,7 +9,6 @@ const Footer = () => {
       <div className="mx-auto max-w-7xl px-6 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
           
-          {/* Company Info - Column 1 */}
           <div className="col-span-1 md:col-span-1 lg:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-6 group">
               <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground group-hover:scale-110 transition-transform">
@@ -38,7 +37,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links - Column 2 */}
           <div>
             <h3 className="text-foreground font-bold mb-6">Quick Links</h3>
             <ul className="space-y-4">
@@ -49,7 +47,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Legal - Column 3 */}
           <div>
             <h3 className="text-foreground font-bold mb-6">Legal</h3>
             <ul className="space-y-4">
@@ -59,7 +56,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Security Box - Column 4 */}
           <div>
             <div className="p-6 rounded-2xl bg-secondary/50 border border-border">
               <Shield className="text-primary mb-4" size={28} />
@@ -72,7 +68,6 @@ const Footer = () => {
 
         </div>
 
-        {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm">
             © {new Date().getFullYear()} SecureBank. All rights reserved.

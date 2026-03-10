@@ -1,8 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Toaster } from "sonner"; // <-- Ye line add karni hai
+import { Toaster } from "sonner";
 
-// Imports
 import Header from "./Pages/Header";
 import Footer from "./Comps/Footer"; 
 import Home from "./Pages/Home";
@@ -18,7 +17,6 @@ import ProtectedRoute from "./Comps/ProtectedRoute";
 const App = () => {
   return (
     <BrowserRouter>
-      {/* Toaster ko yahan add karein taa ke poori app mein notifications dikh sakein */}
       <Toaster position="top-center" richColors /> 
       
       <div className="min-h-screen bg-background text-foreground font-sans flex flex-col">

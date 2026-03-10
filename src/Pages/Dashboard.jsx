@@ -11,14 +11,12 @@ const Dashboard = () => {
   const [userName, setUserName] = useState("User");
   const [userPin, setUserPin] = useState("----");
 
-  // Forms State
   const [amount, setAmount] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
   const [receiverEmail, setReceiverEmail] = useState("");
   const [loading, setLoading] = useState({ deposit: false, withdraw: false, transfer: false });
   const [activeTab, setActiveTab] = useState("deposit");
 
-  // Popup State for Transfer Confirmation
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const { balance, history } = useSelector((state) => state.banking);
@@ -54,23 +52,21 @@ const Dashboard = () => {
       let currentBalance = 0;
       let currentPin = profile?.pin;
 
-      // EMAIL SAVE KARNE KA NAYA LOGIC
       if (!profile) {
         currentPin = Math.floor(1000 + Math.random() * 9000).toString();
         await supabase.from('profiles').insert([{ 
           id: session.user.id, 
           balance: 0, 
           pin: currentPin,
-          email: session.user.email // <--- Yahan Email auto-save hoga
+          email: session.user.email
         }]);
       } else {
         currentBalance = profile.balance || 0;
-        // Agar purani profile hai par email ya pin missing hai toh auto-update kardo
         if (!currentPin || !profile.email) {
           currentPin = currentPin || Math.floor(1000 + Math.random() * 9000).toString();
           await supabase.from('profiles').update({ 
             pin: currentPin,
-            email: session.user.email // <--- Yahan Email auto-update hoga
+            email: session.user.email
           }).eq('id', session.user.id);
         }
       }
@@ -108,7 +104,7 @@ const Dashboard = () => {
 
   const initiateTransfer = () => {
     const val = parseFloat(transferAmount);
-    const cleanEmail = receiverEmail.trim(); // <--- Spaces hata dega
+    const cleanEmail = receiverEmail.trim();
     
     if (!val || val <= 0) return toast.error("Please enter a valid amount");
     if (!cleanEmail) return toast.error("Please enter receiver's email");
@@ -123,16 +119,15 @@ const Dashboard = () => {
     setLoading({ ...loading, transfer: true });
     
     const val = parseFloat(transferAmount);
-    const cleanEmail = receiverEmail.trim(); // <--- Spaces hata dega
-
+    const cleanEmail = receiverEmail.trim();
     try {
       const { data: receiverProfile, error: receiverError } = await supabase
         .from('profiles')
         .select('id, balance, email')
-        .eq('email', cleanEmail) // <--- Clean email search hoga
+        .eq('email', cleanEmail)
         .maybeSingle();
 
-      if (receiverError || !receiverProfile) throw new Error("Receiver not found! Unho ne abhi tak apna account setup nahi kiya.");
+      if (receiverError || !receiverProfile) throw new Error("Receiver not found! Please ensure they have registered an account.");
 
       const senderNewBalance = balance - val;
       await supabase.from('profiles').update({ balance: senderNewBalance }).eq('id', user.id);
@@ -160,7 +155,6 @@ const Dashboard = () => {
   return (
     <div className="min-h-[calc(100vh-4rem)] p-6 md:p-10 max-w-7xl mx-auto relative">
       
-      {/* --- CONFIRMATION POPUP MODAL --- */}
       <AnimatePresence>
         {showConfirmModal && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -211,7 +205,6 @@ const Dashboard = () => {
           </div>
         )}
       </AnimatePresence>
-      {/* --- END POPUP --- */}
 
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
         <div>

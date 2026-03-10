@@ -14,7 +14,6 @@ const Login = () => {
   
   const navigate = useNavigate();
 
-  // Handle Email/Password Login
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!email || !password) {
@@ -33,11 +32,10 @@ const Login = () => {
       toast.error(error.message);
     } else {
       toast.success("Welcome back!");
-      navigate("/dashboard"); // Redirect to Dashboard
+      navigate("/dashboard");
     }
   };
 
-  // Handle OAuth Login
   const handleOAuth = async (provider) => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: provider,

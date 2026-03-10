@@ -6,7 +6,6 @@ import { AlertTriangle, Home } from 'lucide-react';
 const NotFound = () => {
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center relative overflow-hidden px-6 text-center">
-      {/* Background Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-red-500/10 blur-[120px] rounded-full pointer-events-none" />
 
       <motion.div 

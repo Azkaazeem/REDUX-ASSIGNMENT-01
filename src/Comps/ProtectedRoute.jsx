@@ -5,16 +5,18 @@ import { Loader2 } from 'lucide-react';
 
 const ProtectedRoute = ({ children }) => {
   const [session, setSession] = useState(null);
+  // console.log(session);
+  
   const [loading, setLoading] = useState(true);
+  // console.log(loading);
+  
 
   useEffect(() => {
-    // Check current auth session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setLoading(false);
     });
 
-    // Listen for login/logout events
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
@@ -30,12 +32,10 @@ const ProtectedRoute = ({ children }) => {
     );
   }
 
-  // Agar session nahi hai (user logged in nahi hai), toh login page par bhejo
   if (!session) {
     return <Navigate to="/login" replace />;
   }
 
-  // Agar user logged in hai, toh Dashboard (children) dikhao
   return children;
 };
 
