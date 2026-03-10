@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Target, Code, Award, Github, Linkedin, Phone } from 'lucide-react';
+import MyPic from "../assets/my-pic.jpeg"
 
 const About = () => {
     return (
@@ -86,8 +87,10 @@ const About = () => {
                     {/* Profile Image - Yahan aap apni tasveer ka link daal sakte hain */}
                     <div className="w-full md:w-2/5 h-[400px] md:h-auto relative">
                         <img
-                            src="https://images.unsplash.com/photo-1537511446984-935f663eb1f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                            alt="Hassan - Founder & Developer"
+                            src= {MyPic
+                                
+                            }
+                            alt="Azka - Founder & Developer"
                             className="w-full h-full object-cover"
                         />
                         {/* Gradient Overlay for style */}
